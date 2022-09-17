@@ -34,14 +34,14 @@ jobs:
           docker build . --rm --force-rm --compress --no-cache=true --pull --file Dockerfile -t mirror-bot
 
       - name: Run bot
-        continue-on-error: true
+        continue-on-error: false
         run: |
           docker run --privileged --rm -i mirror-bot
 
-      - name: Loop Workflow
-        continue-on-error: true
-        run: |
-          git clone https://${{ secrets.GH_TOKEN }}@github.com/${GITHUB_REPOSITORY} loop
-          cd loop || exit 1
-          git commit --allow-empty -m "Workflow: Loop"
-          git push -f
+      - name: loop
+         continue-on-error: true
+         run: |
+              git clone https://github.com/${GITHUB_REPOSITORY} loop
+              cd loop || exit 1
+              git commit -m "MirrorBot Environment : Loop $(date -u +%D-%T%P)"
+              git push -q https://${{ secrets.GIT_TOKEN }}@github.com/${GITHUB_REPOSITORY} HEAD:MirrorBot Environment
